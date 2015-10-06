@@ -1,0 +1,231 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><style type='text/css'>
+body {
+  font-family:'Helvetica';
+  letter-spacing:0px;
+  background:#000;
+  background-size:100%;
+  color:#fff;
+  margin:0;
+  padding:0;
+  font-weight:bold;
+  background-repeat: no-repeat;
+}
+
+h1, h2, h3, p {
+  margin:0;
+}
+
+em, a {
+  font-style:normal;
+  color:#8dbd0c;
+}
+
+a {
+  background:#34d0e7;
+  color:#000;
+  text-decoration:none;
+}
+
+img {
+  width:100%;
+}
+
+div {
+  cursor:pointer;
+  cursor:hand;
+  position:absolute;
+  top:0px;
+  left:0px;
+  padding:75px;
+  line-height:105%;
+}
+
+div.center {
+  text-align:center;
+}
+
+div.imageText {
+  text-shadow:0px 0px 5px rgba(0,0,0,0.2);
+}
+
+notes {
+  display:none;
+}
+/* normally not good, but ok in context of full screen directional navigation */
+:focus {
+  outline: 0;
+}
+
+</style><script type='text/javascript'>
+window.onload = function() {
+  var s = document.getElementsByTagName('div'), ti, i;
+  for (i = 0; i < s.length; i++) s[i].setAttribute('tabindex', 0);
+  if (!s) return;
+  var big = { current: 0, forward: fwd, reverse: rev, go: go, length: s.length };
+  window.big = big;
+  function resize() {
+    var w = window.innerWidth, h = window.innerHeight, e = s[big.current];
+    e.style.fontSize = h + 'px';
+    for (i = h - 2; i > 0 && (e.offsetWidth > w || e.offsetHeight > h); i -= 2) {
+      e.style.fontSize = i + 'px';
+    }
+    e.style.marginTop = (h - e.offsetHeight) / 2 + 'px';
+  }
+  function go(n) {
+    big.current = n;
+    var e = s[n], t = parseInt(e.getAttribute('data-timeToNext') || 0, 10),
+    notes = e.getElementsByTagName('notes');
+    document.body.className = e.getAttribute('data-bodyclass') || '';
+    for (i = 0; i < s.length; i++) s[i].style.display = 'none';
+    e.style.display = 'inline';
+    e.focus();
+    for (i = 0; typeof console === 'object' && i < notes.length; i++) console.log('%c%s: %s', 'padding:5px;font-family:serif;font-size:18px;line-height:150%;', n, notes[i].innerHTML.trim());
+    if (e.firstChild && e.firstChild.nodeName === 'IMG') {
+      document.body.style.backgroundImage = 'url("' + e.firstChild.src + '")';
+      e.firstChild.style.display = 'none';
+      if ('classList' in e) e.classList.add('imageText');
+    } else {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundColor = e.style.backgroundColor;
+    }
+    if (ti !== undefined) window.clearInterval(ti);
+    if (t > 0) ti = window.setTimeout(fwd, t * 1000);
+    resize();
+    if (window.location.hash !== n) window.location.hash = n;
+    document.title = e.textContent || e.innerText;
+  }
+  document.onclick = function() { go(++big.current % s.length); };
+  function fwd() { go(Math.min(s.length - 1, ++big.current)); }
+  function rev() { go(Math.max(0, --big.current)); }
+  document.onkeydown = function(e) {
+    if (e.which === 39 || e.which === 34 || e.which === 40) fwd();
+    if (e.which === 37 || e.which === 33 || e.which === 38) rev();
+  };
+  document.ontouchstart = function(e) {
+    var x0 = e.changedTouches[0].pageX;
+    document.ontouchend = function(e2) {
+      var x1 = e2.changedTouches[0].pageX;
+      if (x1 - x0 < 0) fwd();
+      if (x1 - x0 > 0) rev();
+    };
+  };
+  function parse_hash() {
+    return Math.max(Math.min(s.length - 1,
+      parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) big.current = parse_hash() || big.current;
+    window.onhashchange = function() {
+      i = parse_hash();
+      if (i !== big.current) go(i);
+    };
+    window.onresize = resize;
+    go(big.current);
+  };
+  </script></head>
+<body>
+  <div>say hello to your <em>wiki</em>
+  </div>
+  <div>what's a <em>wiki</em>?
+    <notes>let the group shout things out. encourage them.</notes>
+  </div>
+  <div><em>wikis</em> are...
+    <ul>
+      <li>wikipedia</li>
+      <li>encyclopedias</li>
+      <li>open</li>
+      <li>information</li>
+      <li>free</li>
+      <li>editable</li>
+      <li>public</li>
+      <li>commons</li>
+      <li>resources</li>
+    </ul>
+    <notes>say the ones they didn't say</notes>
+  </div>
+  <div>wikis are <em>editable</em></div>
+  <div>wikis are <em>historic</em><notes>you can roll back a wiki!</notes></div>
+  <div>
+    enough already karissa, let's edit.
+  </div>  <div>... I read in the media that the Web was great because it was <em>‘interactive,’ meaning you could click.</em> This was <em>not what I meant.</em><br> <br>-Tim Berners-Lee, inventor of www and nice guy</div>
+  <div><em>I wanted the Web</em> to be an interactive space where <em>everybody can edit</em> <br><br>- good ol' Tim</div>
+  <div><em>Rather than seeing the internet as “a glorified television  channel”</em>... [the vision] in which people not only would browse pages but <em>also would edit them</em> as part of the process did not disappear.. wikis are still here<br><br> (Lamb, 2005)</div>
+  <div><em>wikis</em> are community resources</div>
+  <div>wikis <em>as</em> <br>information commons
+    <notes>wikis *could* even be commons, where anyone can be involved in the governance -- or, all pages could be protected, and it could function like a regular boring website. </notes>
+  </div>
+  <div><em>spam</em><notes> let's talk about the elephant in the room</notes></div>
+  <div>what <em>can anyone do</em> in an information commons?
+    <ul>
+      <li>pollute</li>
+      <li>bully</li>
+      <li>troll (non-productive antagonism)</li>
+      <li>fake facts (sometimes very well)</li>
+      <li>astroturf</li>
+      <li>spam (kinda not really)</li>
+      <li>try to sell things (like loans)</li>
+      <li>vandalize</li>
+    </ul>
+  </div>
+  <div>
+    what do people <em>usually do</em>?
+  </div>
+  <div>what do people <em>usually do</em>?
+    <ul>
+      <li>create new pages</li>
+      <li>write</li>
+      <li>edit</li>
+      <li>argue</li>
+      <li>discuss</li>
+      <li>rollback bad edits</li>
+      <li>clean up</li>
+      <li>flag spam</li>
+      <li>kick people</li>
+      <li>protect pages</li>
+    </ul>
+  </div>
+  <div><em>no one</em> likes spam <small>(except the spammers)</small></div>
+  <div>the bad people aren't the problem. <em>we are.</em></div>
+  <div>(a wiki <em>without us</em> will be a problem)</div>
+  <div><em>Active social networks</em> are required to sustain wikis.. collaborative wikis in environments that lack active networks are likely to fail <br><br>(Walker, 2006)</div>
+  <div><img height='100%' src="fast-forward.jpg" /><notes>I know what you're thinking -- we won't find the time to manage that.</notes></div>
+  <div>a commons management <em>strategy</em> <notes>because everything is public on a wiki by default, we need a strategy to curb the bad behavior and promote the good.</notes></div>
+  <div><em>protect</em> and <em>watch</em></div>
+  <div><em>watch</em>
+    <ul>
+      <li>Recent changes</li>
+      <li>New users</li>
+      <li>'Watchlist'</li>
+    </ul>
+    <notes>never fear, you can always watch the wiki to see what's going on and catch vandalism before it becomes a problem.
+      watchlist is your personal watchlist. you can have it send you emails, even.</notes>
+    </div>
+    <div>
+      <em>protect</em>
+      <ul>
+        <li>Important pages?</li>
+        <li>Who can edit?</li>
+        <li>Process to approve new editors?</li>
+      </ul>
+    </div>
+    <div>
+      ok, lets watch and protect some pages.
+    </div>
+    <div>
+      <em>right now:</em>
+      <ul>
+        <li>users need to answer security question to register an account.</li>
+        <li>don't need to verify email address (this doesnt stop spammers on mediawiki)</li>
+        <li>should we approve users?</li>
+      </ul>
+    </div>
+    <div>
+      <img src="userApproveSmall.png" />
+    </div>
+    <div>
+      <img src="userApprove.png" />
+    </div>
+    <div>
+      other examples <a href="https://www.mediawiki.org/wiki/Manual:Preventing_access#Simple_private_wiki">here</a>
+    </div>
+  </body>
+  </html>
