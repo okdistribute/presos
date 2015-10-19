@@ -1,0 +1,258 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><style type='text/css'>
+body {
+  font-family:'Helvetica';
+  letter-spacing:0px;
+  background:#000;
+  background-size:100%;
+  color:#fff;
+  margin:0;
+  padding:0;
+  font-weight:bold;
+  background-repeat: no-repeat;
+}
+
+h1, h2, h3, p {
+  margin:0;
+}
+
+em, a {
+  font-style:normal;
+  color:#8dbd0c;
+}
+
+a {
+  background:#34d0e7;
+  color:#000;
+  text-decoration:none;
+}
+
+.white {
+  background-color: white;
+}
+
+img.small {
+  width: initial;
+}
+
+img {
+  width:100%;
+}
+
+div {
+  cursor:pointer;
+  cursor:hand;
+  position:absolute;
+  top:0px;
+  left:0px;
+  padding:75px;
+  line-height:105%;
+}
+
+div.center {
+  text-align:center;
+}
+
+div.imageText {
+  text-shadow:0px 0px 5px rgba(0,0,0,0.2);
+}
+
+notes {
+  display:none;
+}
+/* normally not good, but ok in context of full screen directional navigation */
+:focus {
+  outline: 0;
+}
+
+</style><script type='text/javascript'>
+window.onload = function() {
+  var s = document.getElementsByTagName('div'), ti, i;
+  for (i = 0; i < s.length; i++) s[i].setAttribute('tabindex', 0);
+  if (!s) return;
+  var big = { current: 0, forward: fwd, reverse: rev, go: go, length: s.length };
+  window.big = big;
+  function resize() {
+    var w = window.innerWidth, h = window.innerHeight, e = s[big.current];
+    e.style.fontSize = h + 'px';
+    for (i = h - 2; i > 0 && (e.offsetWidth > w || e.offsetHeight > h); i -= 2) {
+      e.style.fontSize = i + 'px';
+    }
+    e.style.marginTop = (h - e.offsetHeight) / 2 + 'px';
+  }
+  function go(n) {
+    big.current = n;
+    var e = s[n], t = parseInt(e.getAttribute('data-timeToNext') || 0, 10),
+    notes = e.getElementsByTagName('notes');
+    document.body.className = e.getAttribute('data-bodyclass') || '';
+    for (i = 0; i < s.length; i++) s[i].style.display = 'none';
+    e.style.display = 'inline';
+    e.focus();
+    for (i = 0; typeof console === 'object' && i < notes.length; i++) console.log('%c%s: %s', 'padding:5px;font-family:serif;font-size:18px;line-height:150%;', n, notes[i].innerHTML.trim());
+    if (e.firstChild && e.firstChild.nodeName === 'IMG') {
+      document.body.style.backgroundImage = 'url("' + e.firstChild.src + '")';
+      e.firstChild.style.display = 'none';
+      if ('classList' in e) e.classList.add('imageText');
+    } else {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundColor = e.style.backgroundColor;
+    }
+    if (ti !== undefined) window.clearInterval(ti);
+    if (t > 0) ti = window.setTimeout(fwd, t * 1000);
+    resize();
+    if (window.location.hash !== n) window.location.hash = n;
+    document.title = e.textContent || e.innerText;
+  }
+  document.onclick = function() { go(++big.current % s.length); };
+  function fwd() { go(Math.min(s.length - 1, ++big.current)); }
+  function rev() { go(Math.max(0, --big.current)); }
+  document.onkeydown = function(e) {
+    if (e.which === 39 || e.which === 34 || e.which === 40) fwd();
+    if (e.which === 37 || e.which === 33 || e.which === 38) rev();
+  };
+  document.ontouchstart = function(e) {
+    var x0 = e.changedTouches[0].pageX;
+    document.ontouchend = function(e2) {
+      var x1 = e2.changedTouches[0].pageX;
+      if (x1 - x0 < 0) fwd();
+      if (x1 - x0 > 0) rev();
+    };
+  };
+  function parse_hash() {
+    return Math.max(Math.min(s.length - 1,
+      parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) big.current = parse_hash() || big.current;
+    window.onhashchange = function() {
+      i = parse_hash();
+      if (i !== big.current) go(i);
+    };
+    window.onresize = resize;
+    go(big.current);
+  };
+  </script>
+</head>
+<body>
+  <div><em>Managing changse to data</em><br><br>karissa mckelvey</div>
+  <div><em>Managing changs to data</em><br><br>karissa mckelvey</div>
+  <div><em>Managing chang to data</em><br><br>karissa mckelvey</div>
+  <div><em>Managing change to data</em><br><br>karissa mckelvey</div>
+  <div><em>Managing changes to data</em><br><br>karissa mckelvey</div>
+  <div>
+    <img src="science.jpg" />
+    Economist, Oct 2013
+  </div>
+  <div>
+    "A rule of thumb among biotech ... is that <em>half of published research cannot be replicated.</em>"
+  </div>
+  <div>
+    <img src="replicatation-graphic-b.png" />
+    Nature, Aug 2015
+  </div>
+  <div>
+    Over <em>half</em> of psychology studies couldn't be reproduced.
+  </div>
+  <div>
+    <em>Dat Project</em><br><br><img src="sloan.jpg"/>
+  </div>
+  <div>
+    Why?
+  </div>
+  <div>data is too big</div>
+  <div>code/data is closed-source</div>
+  <div>infrastructure is proprietary</div>
+  <div>deployment costs money</div>
+  <div>code/data is lost</div>
+  <div>code is hard to install</div>
+  <div>code is old</div>
+  <div>
+    How do scientists reproduce research today?
+  </div>
+  <div>
+    How do data scientists collaborate today?
+  </div>
+  <div>
+    <img src="github.png" />
+    <notes>github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
+  </div>
+  <div>
+    <img src="serverclient.jpg" />
+    shared university network drives
+  </div>
+  <div>
+    <img src="aws.jpg" class="white" />
+    Mount dropbox and into aws!
+  </div>
+  <div>
+    <img src="dropbox.png" class="white" />
+    and email. :(
+  </div>
+  <div>
+    domain experts aren't developers
+    <notes>domain experts aren't developers.
+      a domain expert, like a data scientist, will want to focus on the algorithms. the math. the people. the stars.
+    </notes>
+  </div>
+  <div><img src="math.jpg" /></div>
+  <div><img src="ocean.jpg" /></div>
+  <div><img src="andromeda.jpg" class="small"/></div>
+  <div style="padding: 0px;">
+    <video width="100%" autoplay>
+      <source src="error.mov">
+    </video>
+    <notes>
+    they don't want to fiddle with configuration. they don't want to endlessly search how to install that C library. or how to resolve conflicts between dependencies. or how to install
+    </notes>
+  </div>
+  <div>
+    git is for developing source code, and thats ok.
+    <notes>
+      git could work for 90% of the cases, but its an interface created for developers, not for domain experts.
+    </notes>
+  </div>
+  <div>
+    How do domain experts not "accidentally __" the data?
+  </div>
+  <div>
+    Domain experts need something like git.
+  </div>
+  <div>
+    the tool should be <em>simple.</em>
+  </div>
+  <div>
+    the tool should be <em>composable.</em>
+    <notes> so that developers, data scientists, and domain experts can work together.</notes>
+  </div>
+  <div>
+    the tool should <br><em>just work.</em>
+    <notes></notes>
+  </div>
+  <div>
+    How do you build a git-like tool designed for data?
+    <notes>
+      the hardest problem we have always had is the interface to dat.
+    </notes>
+  </div>
+  <div>
+    Git: <em>Merkle DAG</em><br><br> (directed acyclic graph)
+  </div>
+  <div>
+    <em>Merkle DAG</em>
+
+
+
+  </div>
+  <div>
+    Why Node.js?
+    <ul>
+      <li>Streams-first</li>
+      <li>Modularity-first</li>
+      <li>C library integrations</li>
+      <li>Easy to make desktop/web apps</li>
+    </ul>
+  </div>
+  <div>
+      <img src="people.png" />
+      big thanks
+  </div>
+</body>
+</html>
