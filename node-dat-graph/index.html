@@ -64,7 +64,11 @@ notes {
   outline: 0;
 }
 
-</style><script type='text/javascript'>
+</style>
+<link rel="stylesheet" href="zenburn.css">
+<script src="highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type='text/javascript'>
 window.onload = function() {
   var s = document.getElementsByTagName('div'), ti, i;
   for (i = 0; i < s.length; i++) s[i].setAttribute('tabindex', 0);
@@ -147,8 +151,6 @@ window.onload = function() {
   <div>
     <img src="replicatation-graphic-b.png" />
     Nature, Aug 2015
-  </div>
-  <div>
     Over <em>half</em> of psychology studies couldn't be reproduced.
   </div>
   <div>
@@ -165,26 +167,31 @@ window.onload = function() {
   <div>code is hard to install</div>
   <div>code is old</div>
   <div>
-    How do scientists reproduce research today?
-  </div>
-  <div>
-    How do data scientists collaborate today?
-  </div>
-  <div>
     <img src="github.png" />
-    <notes>github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
+    <notes> unfortunately, its not that easy. github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
+  </div>
+  <div>
+    How do scientists reproduce research?
+    <notes>we had to look into how scientists actually do reproduce research today and try to build a solution for them.</notes>
+  </div>
+  <div>
+    How do data scientists <em>collaborate</em> today?
+  </div>
+  <div>
+    <em>collaboration (n.) <br>/kəˌlabəˈrāSH(ə)n/</em><br>
+    computers working together to produce or create something.
   </div>
   <div>
     <img src="serverclient.jpg" />
     shared university network drives
   </div>
   <div>
-    <img src="aws.jpg" class="white" />
-    Mount dropbox and into aws!
-  </div>
-  <div>
     <img src="dropbox.png" class="white" />
     and email. :(
+  </div>
+  <div>
+    <img src="aws.jpg" class="white" />
+    Mount dropbox into aws!
   </div>
   <div>
     domain experts aren't developers
@@ -204,16 +211,23 @@ window.onload = function() {
     </notes>
   </div>
   <div>
+    domain experts don't want to use git.
+  </div>
+  <div>
     git is for developing source code, and thats ok.
     <notes>
       git could work for 90% of the cases, but its an interface created for developers, not for domain experts.
     </notes>
   </div>
   <div>
-    How do domain experts not "accidentally __" the data?
+    But, domain experts need something like git.
   </div>
   <div>
-    Domain experts need something like git.
+    How do you build a frictionless git-like tool for data?
+    <notes>
+      the hardest problem we have always had is the interface to dat.
+      how can we make something that acts like git, but is frictionless?
+    </notes>
   </div>
   <div>
     the tool should be <em>simple.</em>
@@ -227,32 +241,147 @@ window.onload = function() {
     <notes></notes>
   </div>
   <div>
-    How do you build a git-like tool designed for data?
-    <notes>
-      the hardest problem we have always had is the interface to dat.
-    </notes>
-  </div>
-  <div>
-    Git: <em>Merkle DAG</em><br><br> (directed acyclic graph)
-  </div>
-  <div>
-    <em>Merkle DAG</em>
-
-
-
-  </div>
-  <div>
-    Why Node.js?
+    Why did we chose <em>Node</em>?
     <ul>
-      <li>Streams-first</li>
-      <li>Modularity-first</li>
-      <li>C library integrations</li>
-      <li>Easy to make desktop/web apps</li>
+      <li><em>Streams-first</em> (good for big files)</li>
+      <li><em>Modularity-first</em> (seprate components)</li>
+      <li><em>C library integrations</em> (leveldb)</li>
+      <li><em>Desktop/web apps</em> (fast to develop)</li>
     </ul>
   </div>
   <div>
-      <img src="people.png" />
-      big thanks
+    The Graph.
   </div>
+  <div>
+    <emMerkle DAG</em>
+  </div>
+  <div>
+    <em>Merkle Directed Acyclic Graph</em>
+  </div>
+  <div>
+    <img src="merkle.png" />
+  </div>
+  <div>
+    <img src="no-cycles.png" />
+  </div>
+  <div>
+    <img src="merkle-dag-users.png" />
+  </div>
+  <div>
+    <img src="merkle-tree-example.png" />
+    <notes>a merkle tree allows us </notes>
+  </div>
+  <div>
+    first node in the graph is the head. no parents (links).
+<pre><code class="node">var node = {links: [], value: 'a'}
+</code></pre>
+</div>
+<div><pre><code class="node">var hash = require('crypto')('sha256')
+var head = hash(node.value) + hash(node.value.length)
+</code></pre>
+</div>
+<div>
+adding a node that points to the head
+<pre><code class="node">var node = {links: [head], value: 'b'})
+</code></pre>
+</div>
+<div>
+<pre><code class='node'>var child = hash(node.value) + hash(node.value.length) + hash(head)
+</pre></code>
+</div>
+<div>
+<pre><code class="nohighlight">
+aa4da (head)
+  |
+<em>bbd32</em> (new child node)
+
+</code></pre>
+</div>
+<div>
+<pre><code class="nohighlight">
+    aa4da
+      |
+    bbd32
+    /   \
+ccdef   ddbdf  <- lets merge these two
+
+</code></pre>
+</div>
+<div>
+<pre><code>node = { links: [ccdef, ddbdf], value: 'merging two things' }
+</pre></code>
+</div>
+<div>
+<pre><code class="nohighlight">
+    aa4da
+      |
+    bbd32
+    /   \
+ccdef   ddbdf
+    \   /
+    <em>ee0bf</em> <- new node here for merge
+</code></pre>
+</div>
+
+<div>
+<pre><code class="node">// adds hash(data.length) automagically
+var sha = require('framed-hash')('sha256')
+
+function add (node) {
+  // add the node's value to the hash.
+  sha.update(node.value)
+
+  // add hash of all link nodes.
+  for (var i = 0; i < node.links.length; i++) sha.update(node.links[i])
+
+  // get the new unique key for the node
+  return sha.digest()
+}
+</pre></code>
+</div>
+<div>
+  What is <pre>node.value</pre>?
+  <notes>because we are hashing node.value, if we are storing a lot of data in it, it will be slow. this is the problem with git.</notes>
+</div>
+<div>
+  node.value is..
+  <ul>
+    <li>
+      <em>git</em> the entire file (slow!)
+    </li>
+    <li>
+      <em>git lfs</em> a pointer to the file (faster)
+    </li>
+    <li>
+      <em>dat</em> a pointer to a file or list of files (a filesystem!)
+    </li>
+  </ul>
+</div>
+<div>
+  <em>composable means separate.</em>
+<pre><code class="node">require('dat-graph') // merkle DAG.
+require('dat-blob-store') // blob store
+</pre></code>
+</div>
+<div>
+  in <em>dat</em>, each graph node points to the content-addressable blob store.
+</div>
+<div>
+  Replication
+</div>
+<div>
+  <em>computer 1</em> wants to replicate <em>computer 2</em>
+</div>
+
+
+<div>
+  this makes it easy to switch out the blob store backend for something else. it makes it faster and easier
+</div>
+<div>
+</div>
+<div>
+    <img src="people.png" />
+    big thanks
+</div>
 </body>
 </html>
