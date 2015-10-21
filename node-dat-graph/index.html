@@ -136,11 +136,7 @@ window.onload = function() {
   </script>
 </head>
 <body>
-  <div><em>Managing changse to data</em><br><br>karissa mckelvey</div>
-  <div><em>Managing changs to data</em><br><br>karissa mckelvey</div>
-  <div><em>Managing chang to data</em><br><br>karissa mckelvey</div>
-  <div><em>Managing change to data</em><br><br>karissa mckelvey</div>
-  <div><em>Managing changes to data</em><br><br>karissa mckelvey</div>
+  <div><em>dat:</em> verison control for data<br><br>karissa mckelvey</div>
   <div>
     <img src="science.jpg" />
     Economist, Oct 2013
@@ -154,7 +150,7 @@ window.onload = function() {
     Over <em>half</em> of psychology studies couldn't be reproduced.
   </div>
   <div>
-    <em>Dat Project</em><br><br><img src="sloan.jpg"/>
+    <em>dat</em><br><br><img src="sloan.jpg"/>
   </div>
   <div>
     Why?
@@ -176,10 +172,6 @@ window.onload = function() {
   </div>
   <div>
     How do data scientists <em>collaborate</em> today?
-  </div>
-  <div>
-    <em>collaboration (n.) <br>/kəˌlabəˈrāSH(ə)n/</em><br>
-    computers working together to produce or create something.
   </div>
   <div>
     <img src="serverclient.jpg" />
@@ -230,18 +222,17 @@ window.onload = function() {
     </notes>
   </div>
   <div>
-    the tool should be <em>simple.</em>
+    <em>collaboration (noun)</em> <br>
+    people working together to produce or create something.
   </div>
   <div>
-    the tool should be <em>composable.</em>
-    <notes> so that developers, data scientists, and domain experts can work together.</notes>
+    <em>computers</em> working together to produce or create something.
   </div>
   <div>
-    the tool should <br><em>just work.</em>
-    <notes></notes>
+    <em>programs</em> working together
   </div>
   <div>
-    Why did we chose <em>Node</em>?
+    Why did we chose Node?
     <ul>
       <li><em>Streams-first</em> (good for big files)</li>
       <li><em>Modularity-first</em> (seprate components)</li>
@@ -253,10 +244,7 @@ window.onload = function() {
     The Graph.
   </div>
   <div>
-    <emMerkle DAG</em>
-  </div>
-  <div>
-    <em>Merkle Directed Acyclic Graph</em>
+    <em>Merkle DAG</em>
   </div>
   <div>
     <img src="merkle.png" />
@@ -276,6 +264,11 @@ window.onload = function() {
 <pre><code class="node">var node = {links: [], value: 'a'}
 </code></pre>
 </div>
+<div>
+<pre><code class="nohighlight">
+<em>aa4da</em> (head)
+</code></pre>
+</div>
 <div><pre><code class="node">var hash = require('crypto')('sha256')
 var head = hash(node.value) + hash(node.value.length)
 </code></pre>
@@ -283,6 +276,7 @@ var head = hash(node.value) + hash(node.value.length)
 <div>
 adding a node that points to the head
 <pre><code class="node">var node = {links: [head], value: 'b'})
+dag.add(node)
 </code></pre>
 </div>
 <div>
@@ -291,21 +285,39 @@ adding a node that points to the head
 </div>
 <div>
 <pre><code class="nohighlight">
-aa4da (head)
-  |
-<em>bbd32</em> (new child node)
-
+<em>bbd32</em> (new head)
+<em>  |</em>
+aa4da (old head, child of bbd32)
 </code></pre>
 </div>
 <div>
-<pre><code class="nohighlight">
-    aa4da
-      |
+  Adding nodes to the head is easy.
+</div>
+<div>
+  But what about conflicts?
+</div>
+<div>
+  the tool should be <em>simple</em>
+</div>
+<div>
+  there are no conflicts in <em>dat</em>
+</div>
+<div>
+<pre><code class="nohighlight">ccdef   ddbdf  <- two "forks"
+    \   /
     bbd32
-    /   \
-ccdef   ddbdf  <- lets merge these two
-
-</code></pre>
+      |
+    aa4da</code></pre>
+</div>
+<div>
+  the tool should be <em>simple</em>
+</div>
+<div>
+<pre><code class="nohighlight">ccdef   ddbdf  <- two "forks"
+    \   /
+    bbd32
+      |
+    aa4da</code></pre>
 </div>
 <div>
 <pre><code>node = { links: [ccdef, ddbdf], value: 'merging two things' }
@@ -313,13 +325,13 @@ ccdef   ddbdf  <- lets merge these two
 </div>
 <div>
 <pre><code class="nohighlight">
-    aa4da
-      |
-    bbd32
-    /   \
+    <em>ee0bf</em> <- new node here for merge
+    <em>/   \</em>
 ccdef   ddbdf
     \   /
-    <em>ee0bf</em> <- new node here for merge
+    bbd32
+      |
+    aa4da
 </code></pre>
 </div>
 
@@ -358,8 +370,8 @@ function add (node) {
   </ul>
 </div>
 <div>
-  <em>composable means separate.</em>
-<pre><code class="node">require('dat-graph') // merkle DAG.
+  <em>composable</em>, keepings thing modular
+  <pre><code class="node">require('dat-graph') // merkle DAG.
 require('dat-blob-store') // blob store
 </pre></code>
 </div>
@@ -367,15 +379,103 @@ require('dat-blob-store') // blob store
   in <em>dat</em>, each graph node points to the content-addressable blob store.
 </div>
 <div>
+  this makes it easy to switch out the blob store backend for something else. (bittorrent, anyone?)
+</div>
+<div>
+  or to store the data differently on different computers, using the same graph.
+</div>
+<div>
   Replication
 </div>
 <div>
-  <em>computer 1</em> wants to replicate <em>computer 2</em>
+  <em>computer 1</em> wants to push new merge to <em>computer 2</em>
 </div>
-
-
 <div>
-  this makes it easy to switch out the blob store backend for something else. it makes it faster and easier
+  computer 1
+<pre><code class="nohighlight">
+    <em>ee0bf</em> <- has new node
+    <em>/   \</em>
+ccdef   ddbdf
+    \   /
+    bbd32
+      |
+    aa4da
+</code></pre>
+</div>
+<div>
+  computer 2
+<pre><code class="nohighlight">
+  <em>ee0bf</em> <- missing
+  <em>/   \</em>
+ccdef   ddbdf
+    \   /
+    bbd32
+      |
+    aa4da
+</code></pre>
+</div>
+<div>
+  computer 1 says <em>"hey, I want to push to you"</em>
+  <pre><code>dat push http://dat.computer2.edu</code></pre>
+</div>
+<div>
+  <em>computer 2 replies</em> <br>"yo! I have these nodes"
+<pre><code>[aa4da, bbd32, ccdef, ddbdf]</code></pre>
+</div>
+<div>
+  <em>computer 1 </em> <br>"ok, cool. you're missing these:"
+<pre><code>{links: [ccdef, ddbdf], value: 'some value'} </code></pre>
+<notes>note, that computer 1 is sending back the metadata and the value.</notes>
+</div>
+<div>
+  <ul>
+    <li>HTTP</li>
+    <li>Websockets</li>
+    <li>SSH</li>
+    <li>Carrier pidgeon</li>
+  </ul>
+</div>
+<div>
+  How does computer 1 know which ones are missing?
+  <notes>The truth is, it doesn't matter.</notes>
+</div>
+<div>
+  <img src="no-cycles.png" />
+  <notes>remember, a merkle dag has no cycles. How do I find a particular node in a graph?</notes>
+</div>
+<div>
+  Binary search
+  <notes>An easy answer is binary search, although we might get more clever later.</notes>
+</div>
+<div>
+  <em>It doesn't matter.</em>
+  <notes>but truthfully it doesn't matter!</notes>
+</div>
+<div>
+  separate <em>replication protocol</em> from <em>on-disk format</em>
+  <notes>one of the first proposals for a simple protocol to separate replication from on-disk format.</notes>
+</div>
+<div>
+  <em>generalized</em> merkle DAG replication
+  <notes>it means we can implement different kinds of graph algorithms</notes>
+</div>
+<div>
+  <ul>
+  <li>Dat's minimal leveldb</li>
+  <li>IPFS on-disk format</li>
+  <li>Ethereum</li>
+  <li>Google sheets</li>
+  </ul>
+  <notes>variety of algorithms to find missing nodes</notes>
+</div>
+<div>
+  Diffing accross machines in a standard way
+</div>
+<div>
+  <img src="merkle-tree-example.png" />
+</div>
+<div>
+  implications for open data
 </div>
 <div>
 </div>
