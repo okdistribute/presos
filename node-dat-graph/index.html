@@ -19,7 +19,9 @@ em, a {
   font-style:normal;
   color:#8dbd0c;
 }
-
+.pull-right {
+  float: right;
+}
 a {
   background:#34d0e7;
   color:#000;
@@ -65,7 +67,7 @@ notes {
 }
 
 </style>
-<link rel="stylesheet" href="zenburn.css">
+<link rel="stylesheet" href="color-brewer.css">
 <script src="highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type='text/javascript'>
@@ -136,35 +138,37 @@ window.onload = function() {
   </script>
 </head>
 <body>
-  <div><em>dat:</em> verison control for data<br><br>karissa mckelvey</div>
+  <div>what the hell is <em>dat</em>?<br><br>karissa mckelvey</div>
   <div>
-    <img src="science.jpg" />
-    Economist, Oct 2013
+    <em>dat-data.com</em> usopendata.org<br><br><img src="sloan.jpg"/>
   </div>
   <div>
-    "A rule of thumb among biotech ... is that <em>half of published research cannot be replicated.</em>"
+    <img src="plus_syria_tcot.png" />
   </div>
   <div>
-    <img src="replicatation-graphic-b.png" />
-    Nature, Aug 2015
-    Over <em>half</em> of psychology studies couldn't be reproduced.
+    <img src="data.jpg" />
+  </div>
+<div>
+    "A rule of thumb among biotech ... is that <em>half of published research cannot be replicated.</em>"<br><br>- Economist, Oct 2013
   </div>
   <div>
-    <em>dat</em><br><br><img src="sloan.jpg"/>
+    "Over <em>half</em> of psychology studies couldn't be reproduced."<br><br>
+    - Nature, Aug 2015
   </div>
   <div>
     Why?
   </div>
-  <div>data is too big</div>
-  <div>code/data is closed-source</div>
-  <div>infrastructure is proprietary</div>
+  <div>code/data is private</div>
+  <div>code is hard to install</div>
   <div>deployment costs money</div>
   <div>code/data is lost</div>
-  <div>code is hard to install</div>
-  <div>code is old</div>
   <div>
     <img src="github.png" />
     <notes> unfortunately, its not that easy. github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
+  </div>
+  <div>
+    <code><pre>git pull --reb origin master
+</pre></code>
   </div>
   <div>
     How do scientists reproduce research?
@@ -195,7 +199,7 @@ window.onload = function() {
   <div><img src="ocean.jpg" /></div>
   <div><img src="andromeda.jpg" class="small"/></div>
   <div style="padding: 0px;">
-    <video width="100%" autoplay>
+    <video width="100%" autoplay loop>
       <source src="error.mov">
     </video>
     <notes>
@@ -203,23 +207,23 @@ window.onload = function() {
     </notes>
   </div>
   <div>
-    domain experts don't want to use git.
-  </div>
-  <div>
-    git is for developing source code, and thats ok.
+    git is for source code, and thats ok.
     <notes>
       git could work for 90% of the cases, but its an interface created for developers, not for domain experts.
     </notes>
   </div>
   <div>
-    But, domain experts need something like git.
+    But, we need something like git for <em>data</em>.
   </div>
   <div>
-    How do you build a frictionless git-like tool for data?
+    How do you build a <em>frictionless</em> git-like tool for data?
     <notes>
       the hardest problem we have always had is the interface to dat.
       how can we make something that acts like git, but is frictionless?
     </notes>
+  </div>
+  <div>
+    <em>frictionless</em>
   </div>
   <div>
     <em>collaboration (noun)</em> <br>
@@ -229,18 +233,46 @@ window.onload = function() {
     <em>computers</em> working together to produce or create something.
   </div>
   <div>
-    <em>programs</em> working together
+    the tool should be <em>simple</em>
+  </div>
+  <div>
+    simple <em>!=</em> easy
+  </div>
+  <div>
+    <img src="nodejs.png" />
   </div>
   <div>
     Why did we chose Node?
-    <ul>
-      <li><em>Streams-first</em> (good for big files)</li>
-      <li><em>Modularity-first</em> (seprate components)</li>
-      <li><em>C library integrations</em> (leveldb)</li>
-      <li><em>Desktop/web apps</em> (fast to develop)</li>
-    </ul>
   </div>
-  <div>
+<div>
+  <em>C library integrations</em> (leveldb)
+</div>
+<div>
+  <pre><code class="nohighlight">npm install -g dat</code></pre>
+  <notes>domain experts don't want to worry about installation.</notes>
+</div>
+<div>
+  <em>Modularity </em> (seprate components)
+  <notes>good at modularity</notes>
+</div>
+<div>
+  Plug in content-addressable storage
+  <pre><code class="node">var store = require('bittorent-down')
+var dat = require('dat')
+var db = dat(store) // pseudocode, but you get the idea
+</pre></code>
+</div>
+<div>
+  <em>Streams-first</em> (good for big files)
+</div>
+<div>
+  <pre><code class="javascript">var stream = db.createDiffStream()
+stream.on('data', function (data) {
+  // do something with new data!
+})
+</pre></code>
+</div>
+<div>
     The Graph.
   </div>
   <div>
@@ -250,14 +282,15 @@ window.onload = function() {
     <img src="merkle.png" />
   </div>
   <div>
-    <img src="no-cycles.png" />
-  </div>
-  <div>
     <img src="merkle-dag-users.png" />
   </div>
   <div>
     <img src="merkle-tree-example.png" />
-    <notes>a merkle tree allows us </notes>
+    <notes>you can use each node to prove that someone else has the same data and all other previous data referenced in the graph. </notes>
+  </div>
+  <div>
+    <img src="no-cycles.png" />
+    <notes> A node may have multiple children and/or multiple parents, but a node may not be the parent of a node that is already in it's own ancestry, as this would create a cyclical relationship.</notes>
   </div>
   <div>
     first node in the graph is the head. no parents (links).
@@ -278,6 +311,13 @@ adding a node that points to the head
 <pre><code class="node">var node = {links: [head], value: 'b'})
 dag.add(node)
 </code></pre>
+</div>
+<div>
+    <pre><code>  a         a = hash(hash(ant.jpg) + b + c)
+ / \        b = hash(bunny.jpg)
+b   c       c = hash(cat.jpg)
+</code></pre>
+<notes>If you are trying to establish if you have the same set of files as someone else over a network connection, both sides construct a Merkle DAG using the same hash function, and simply send their latest hash (`a` in the above figure), which is usually small enough to fit in a single network packet. If this value matches then it means that both graphs must contain the exact same data, as that would be the only case that would result in the hashes being equal.</notes>
 </div>
 <div>
 <pre><code class='node'>var child = hash(node.value) + hash(node.value.length) + hash(head)
@@ -303,17 +343,14 @@ aa4da (old head, child of bbd32)
   there are no conflicts in <em>dat</em>
 </div>
 <div>
-<pre><code class="nohighlight">ccdef   ddbdf  <- two "forks"
+<pre><code class="nohighlight"><em>ccdef   ddbdf  <- two "forks"</em>
     \   /
     bbd32
       |
     aa4da</code></pre>
 </div>
 <div>
-  the tool should be <em>simple</em>
-</div>
-<div>
-<pre><code class="nohighlight">ccdef   ddbdf  <- two "forks"
+<pre><code class="nohighlight"><em>ccdef   ddbdf  <- merge these</em>
     \   /
     bbd32
       |
@@ -334,7 +371,6 @@ ccdef   ddbdf
     aa4da
 </code></pre>
 </div>
-
 <div>
 <pre><code class="node">// adds hash(data.length) automagically
 var sha = require('framed-hash')('sha256')
@@ -370,16 +406,10 @@ function add (node) {
   </ul>
 </div>
 <div>
-  <em>composable</em>, keepings thing modular
-  <pre><code class="node">require('dat-graph') // merkle DAG.
-require('dat-blob-store') // blob store
-</pre></code>
+  in <em>dat</em>, each graph node points to the data storage.
 </div>
 <div>
-  in <em>dat</em>, each graph node points to the content-addressable blob store.
-</div>
-<div>
-  this makes it easy to switch out the blob store backend for something else. (bittorrent, anyone?)
+  this makes it easy to switch out default storage for something else. (bittorrent, anyone?)
 </div>
 <div>
   or to store the data differently on different computers, using the same graph.
@@ -405,8 +435,6 @@ ccdef   ddbdf
 <div>
   computer 2
 <pre><code class="nohighlight">
-  <em>ee0bf</em> <- missing
-  <em>/   \</em>
 ccdef   ddbdf
     \   /
     bbd32
@@ -419,25 +447,16 @@ ccdef   ddbdf
   <pre><code>dat push http://dat.computer2.edu</code></pre>
 </div>
 <div>
-  <em>computer 2 replies</em> <br>"yo! I have these nodes"
-<pre><code>[aa4da, bbd32, ccdef, ddbdf]</code></pre>
+  computer 1 says <em>"I have these nodes, check it out."</em>
+<pre><code>[aa4da, bbd32, ccdef, ddbdf, ee0bf]</code></pre>
 </div>
 <div>
-  <em>computer 1 </em> <br>"ok, cool. you're missing these:"
-<pre><code>{links: [ccdef, ddbdf], value: 'some value'} </code></pre>
-<notes>note, that computer 1 is sending back the metadata and the value.</notes>
+  <img style="height:300px; width: 400px;" src="comp2.jpg" />
+  computer 2 says <br><em>"ok, cool. from those, I have these ones:"</em>
+  <pre><code>[1, 1, 1, 1, 0]</code></pre>
 </div>
 <div>
-  <ul>
-    <li>HTTP</li>
-    <li>Websockets</li>
-    <li>SSH</li>
-    <li>Carrier pidgeon</li>
-  </ul>
-</div>
-<div>
-  How does computer 1 know which ones are missing?
-  <notes>The truth is, it doesn't matter.</notes>
+  How does computer 2 know which ones are missing?
 </div>
 <div>
   <img src="no-cycles.png" />
@@ -452,32 +471,60 @@ ccdef   ddbdf
   <notes>but truthfully it doesn't matter!</notes>
 </div>
 <div>
-  separate <em>replication protocol</em> from <em>on-disk format</em>
+  Separate <br><em>replication protocol</em> <br>from <br><em>on-disk format</em> <br>from <br><em>graph</em>
   <notes>one of the first proposals for a simple protocol to separate replication from on-disk format.</notes>
 </div>
 <div>
-  <em>generalized</em> merkle DAG replication
+  computer 1 is like <br><em>"ok here is what you didn't have"</em>
+  <pre><code>{links: [ccdef, ddbdf], value: 'some value'} </code></pre>
+</div>
+<div>
+<pre><code class="nohighlight">
+    ee0bf
+    /   \
+ccdef   ddbdf
+    \   /
+    bbd32
+      |
+    aa4da
+</code></pre>
+</div>
+  <div>
+    <code><pre>git pull --reb origin master
+</pre></code>
+  </div>
+<div>
+  <ul>
+    <li>HTTP</li>
+    <li>Websockets</li>
+    <li>SSH</li>
+    <li>Carrier pidgeon</li>
+  </ul>
+</div>
+<div>
+  defaults:
+  <ul>
+    <li><em>dat-graph</em> <br>  leveldb binary-search merkle dag</li>
+    <li><em>dat-blob-store</em> <br>  content-addressable filesystem</li>
+    <li><em>dat-stream-replicator</em> <br>  protobuffers over http </li>
+  </ul>
+</div>
+<div>
+  <em>Generalized</em> and <em>modular</em> Merkle DAG for everyone
   <notes>it means we can implement different kinds of graph algorithms</notes>
 </div>
 <div>
+  Diffing accross machines and protocols
   <ul>
-  <li>Dat's minimal leveldb</li>
-  <li>IPFS on-disk format</li>
-  <li>Ethereum</li>
-  <li>Google sheets</li>
+  <li>Dat's minimal leveldb + blob store</li>
+  <li>BitTorrent?</li>
+  <li>Blockchain?</li>
+  <li>Google sheets?</li>
   </ul>
   <notes>variety of algorithms to find missing nodes</notes>
 </div>
 <div>
-  Diffing accross machines in a standard way
-</div>
-<div>
-  <img src="merkle-tree-example.png" />
-</div>
-<div>
-  implications for open data
-</div>
-<div>
+  Implications for open data
 </div>
 <div>
     <img src="people.png" />
