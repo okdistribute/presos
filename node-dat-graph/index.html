@@ -248,19 +248,33 @@ window.onload = function() {
   <em>C library integrations</em> (leveldb)
 </div>
 <div>
-  <pre><code class="nohighlight">npm install -g dat</code></pre>
-  <notes>domain experts don't want to worry about installation.</notes>
+  AbstractLEVELDown
+</div>
+<div>
+  AbstractLEVELDown
+  <ul>
+    <li>filesystem</li>
+    <li>mongo</li>
+    <li>SQL-variants</li>
+    <li>Google XYZ</li>
+  </ul>
+</div>
+<div>
+  <pre><code class="node">var store = require('bittorent-down')
+var dat = require('dat')
+var db = dat(store) // pseudocode, but you get the idea
+</pre></code>
 </div>
 <div>
   <em>Modularity </em> (seprate components)
   <notes>good at modularity</notes>
 </div>
 <div>
-  Plug in content-addressable storage
-  <pre><code class="node">var store = require('bittorent-down')
-var dat = require('dat')
-var db = dat(store) // pseudocode, but you get the idea
-</pre></code>
+  Commandline <em>and</em> electron app
+</div>
+<div>
+  <pre><code class="nohighlight">npm install -g dat</code></pre>
+  <notes>domain experts don't want to worry about installation.</notes>
 </div>
 <div>
   <em>Streams-first</em> (good for big files)
@@ -273,44 +287,25 @@ stream.on('data', function (data) {
 </pre></code>
 </div>
 <div>
-    The Graph.
-  </div>
+  <img src="ant.jpg" />
+</div>
   <div>
-    <em>Merkle DAG</em>
-  </div>
-  <div>
-    <img src="merkle.png" />
-  </div>
-  <div>
-    <img src="merkle-dag-users.png" />
-  </div>
-  <div>
-    <img src="merkle-tree-example.png" />
-    <notes>you can use each node to prove that someone else has the same data and all other previous data referenced in the graph. </notes>
-  </div>
-  <div>
-    <img src="no-cycles.png" />
-    <notes> A node may have multiple children and/or multiple parents, but a node may not be the parent of a node that is already in it's own ancestry, as this would create a cyclical relationship.</notes>
-  </div>
-  <div>
-    first node in the graph is the head. no parents (links).
-<pre><code class="node">var node = {links: [], value: 'a'}
+<pre><code class="javascript">var hash = require('crypto').createHash('sha256')
+var ant = fs.readFileSync('ant.jpg').toString()
 </code></pre>
 </div>
 <div>
-<pre><code class="nohighlight">
-<em>aa4da</em> (head)
-</code></pre>
+  <img src="antcontents.png" />
 </div>
-<div><pre><code class="node">var hash = require('crypto')('sha256')
-var head = hash(node.value) + hash(node.value.length)
+<div>
+<pre><code class="javascript">var hash = require('crypto').createHash('sha256')
+var ant = fs.readFileSync('ant.jpg').toString()
+hash.update(ant)
+hash.digest('hex')
 </code></pre>
 </div>
 <div>
-adding a node that points to the head
-<pre><code class="node">var node = {links: [head], value: 'b'})
-dag.add(node)
-</code></pre>
+<pre><code class="nohighlight">8c45781360575cd0a25409ef0fb1181b0211842b7da14b2ad2d72e18d3021285</code></pre>
 </div>
 <div>
     <pre><code>  a         a = hash(hash(ant.jpg) + b + c)
@@ -318,6 +313,50 @@ dag.add(node)
 b   c       c = hash(cat.jpg)
 </code></pre>
 <notes>If you are trying to establish if you have the same set of files as someone else over a network connection, both sides construct a Merkle DAG using the same hash function, and simply send their latest hash (`a` in the above figure), which is usually small enough to fit in a single network packet. If this value matches then it means that both graphs must contain the exact same data, as that would be the only case that would result in the hashes being equal.</notes>
+</div>
+<div>
+  <em>Merkle DAG</em>
+</div>
+<div>
+  <em>Merkle Directed Acyclic Graph</em>
+</div>
+<div>
+  <img src="merkle.png" />
+</div>
+<div>
+  <img src="no-cycles.png" />
+  <notes> A node may have multiple children and/or multiple parents, but a node may not be the parent of a node that is already in it's own ancestry, as this would create a cyclical relationship.</notes>
+</div>
+<div>
+  <img src="merkle-dag-users.png" />
+</div>
+<div>
+  <img src="merkle-tree-example.png" />
+  <notes>you can use each node to prove that someone else has the same data and all other previous data referenced in the graph. </notes>
+</div>
+<div>
+    <pre><code class="javascript">var dat = require('dat-graph')
+var level = require('level')
+var dag = dat(level('./db'))
+</code></pre>
+</div>
+<div>
+  first node in the graph is the head. no parents (links).
+</div>
+<div>
+<pre><code class="node">var node = {links: [], value: fs.readFileSync('ant.jpg').toString()}
+dag.add(node)
+</code></pre>
+</div>
+<div>
+<pre><code class="nohighlight"><em>aa4da</em> (head)
+</code></pre>
+</div>
+<div>
+adding a node after <em>aa4da</em> (head)
+<pre><code class="node">var node = {links: [head], value: fs.readFileSync('bunny.jpg')})
+dag.add(node)
+</code></pre>
 </div>
 <div>
 <pre><code class='node'>var child = hash(node.value) + hash(node.value.length) + hash(head)
@@ -331,7 +370,7 @@ aa4da (old head, child of bbd32)
 </code></pre>
 </div>
 <div>
-  Adding nodes to the head is easy.
+  Adding nodes to the head works just like git.
 </div>
 <div>
   But what about conflicts?
@@ -514,6 +553,9 @@ ccdef   ddbdf
   <notes>it means we can implement different kinds of graph algorithms</notes>
 </div>
 <div>
+  Future (present?)
+</div>
+<div>
   Diffing accross machines and protocols
   <ul>
   <li>Dat's minimal leveldb + blob store</li>
@@ -525,6 +567,16 @@ ccdef   ddbdf
 </div>
 <div>
   Implications for open data
+</div>
+<div>
+  <img src="knight0.png" />
+</div>
+<div>
+  publicbits.org
+  <img src="knight1.png" />
+</div>
+<div>
+  <img src="knight2.png" />
 </div>
 <div>
     <img src="people.png" />
