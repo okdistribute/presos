@@ -2,9 +2,9 @@
 body {
   font-family:'Helvetica';
   letter-spacing:0px;
-  background:#000;
+  background:white;
   background-size:100%;
-  color:#fff;
+  color: #111;
   margin:0;
   padding:0;
   font-weight:bold;
@@ -32,16 +32,18 @@ a {
   background-color: white;
 }
 
-img.small {
-  width: initial;
+img {
+  width: 50%;
+  height: 50%;
 }
 
-img {
-  width:100%;
+img.large {
+  width: inherit;
 }
 
 div {
   cursor:pointer;
+  text-align: center;
   cursor:hand;
   position:absolute;
   top:0px;
@@ -68,8 +70,6 @@ notes {
 
 </style>
 <link rel="stylesheet" href="color-brewer.css">
-<script src="highlight.pack.js"></script>
-<script>hljs.initHighlightingOnLoad();</script>
 <script type='text/javascript'>
 window.onload = function() {
   var s = document.getElementsByTagName('div'), ti, i;
@@ -83,7 +83,6 @@ window.onload = function() {
     for (i = h - 2; i > 0 && (e.offsetWidth > w || e.offsetHeight > h); i -= 2) {
       e.style.fontSize = i + 'px';
     }
-    e.style.marginTop = (h - e.offsetHeight) / 2 + 'px';
   }
   function go(n) {
     big.current = n;
@@ -94,7 +93,7 @@ window.onload = function() {
     e.style.display = 'inline';
     e.focus();
     for (i = 0; typeof console === 'object' && i < notes.length; i++) console.log('%c%s: %s', 'padding:5px;font-family:serif;font-size:18px;line-height:150%;', n, notes[i].innerHTML.trim());
-    if (e.firstChild && e.firstChild.nodeName === 'IMG') {
+    if (e.firstChild && e.firstChild.classList && e.firstChild.classList.indexOf('large') > 0) {
       document.body.style.backgroundImage = 'url("' + e.firstChild.src + '")';
       e.firstChild.style.display = 'none';
       if ('classList' in e) e.classList.add('imageText');
@@ -139,28 +138,19 @@ window.onload = function() {
 </head>
 <body>
   <div>
-    <em>publicbits.org</em><br><br>
+    <em>PublicBits: <br>Breaking down open data silos</em><br><br>
     <small>max ogden<br>mathias buus<br>karissa mckelvey </small>
   </div>
-  <div>
-    <img src="slides-01.png" />
+  <div><img src="slides-01.png" />
     <notes>look at sue</notes>
   </div>
-  <div><img src="slides-02.png" />
-    <notes>
-      sue is a data analyst. she finds data from the internet and makes sense out of it.
-    </notes>
-  </div>
-  <div>
-    <img src="slides-03.png" />
+  <div><img src="slides-03.png" />
     <notes>.ok, sue wants to do a study on water quality around the world.</notes>
   </div>
-  <div>
-    <img src="slides-04.png" />
+  <div><img src="slides-04.png" />
     <notes>first, she needs to get data about the quality of water. catalogue it. and analyze it.</notes>
   </div>
-  <div>
-    <img src="slides-05.png" />
+  <div><img src="slides-05.png" />
     <notes>
       does searches.
       ckan portals -> “water quality” -> copy link -> download
@@ -169,71 +159,87 @@ window.onload = function() {
     </notes>
   </div>
   <div>
-    <img src="slides-06.png" />
+    <img src="slides-01.png" />
     <notes>
-      once the data is all downloaded, we can make awesome charts, graphs, analysis, policy papers, news articles, everything!
+      once the data is all downloaded, sue can finally compile the data and make all of the analyses, charts, and graphs she needs
+    </notes>
+  </div>
+  <div><img src="slides-06.png" /></div>
+    <notes>
+      … but what happens if the data changes?
+
     </notes>
   </div>
   <div>
-    <img src="slides-08.png" />
+    <img src="slides-05.png" />
+    <notes>sue will have to repeat the process in order to find out..</notes>
   </div>
-  <div>
-    <img src="slides-11.png" />
+  <div><img src="slides-08.png" />
     <notes>
-      … but what happens if the data changes? sue will have to repeat the process in order to find out..if she doesn't, bad things could happen (science, journalism)
+      if she doesn't, bad things could happen (science, journalism)
     </notes>
   </div>
-  <div>
-    <img src="slides-09.png" />
-  </div>
-  <div>
-    <img src="slides-10.png" />
+  <div><img src="slides-07.png" /></div>
+  <div><img src="slides-09.png" /></div>
+  <div><img src="slides-10.png" />
     <notes>
       …. what if the data becomes unavailable? no one else can replicate it. (internet archive)
     </notes>
   </div>
-  <div>
-    <img src="slides-12.png" />
+  <div><img src="slides-12.png" />
     <notes>
       …. how about if the data is really large? it might take forever to download if the server is slow (wikipedia)
     </notes>
   </div>
   <div>
+    open ≠ easy
     <notes>
       Unfortunate side-effect of open data: silos, difficult to access. open doesn't mean easy
     </notes>
   </div>
   <div>
-    <img src="dat-data.png" />
+    <img src="dat.png" />
     <notes>
       we have been working on better data sharing tools for the last few years
     </notes>
   </div>
   <div>
+    share and discover
     <notes>
       we realized the missing piece is an easy way to share and discover datasets
     </notes>
   </div>
   <div>
+    PublicBits.org
     <notes>
       we're calling it Public Bits, publicbits.org
     </notes>
   </div>
+  <div><img src="slides-03.png" />
+  </div>
   <div>
     <img src="slides-13.png" />
     <notes>
-      it will scrape data sources and make them discoverable and easy to download
+      When sue searches it will scrape data sources. and easy to download
     </notes>
   </div>
   <div>
+    <img class="large" src="knight2.png" />
+  </div>
+  <div>
+    <img class="large" src="centralized.png" />
     <notes>
-      we see it as a new data distribution system for open data, not just another app ("from centralized portals to decentralized network" diagram)
+      we see it as a new data distribution system for open data
     </notes>
   </div>
   <div>
-      <img src="people.png" />
+    <img class="large" src="decentralized.png" />
+    <notes>not just another app</notes>
+  </div>
+  <div><img src="people.png" class="large" /></div>
+  <div>
       <em>dat-data.com</em><br>
-      @dat_project<br>
+      @dat_project<br><br>
       #dat on irc.freenode<br>
   </div>
 </body>
