@@ -151,12 +151,13 @@ window.onload = function() {
   <div><em>dat</em> 1.0 sneak peak<br><br>karissa mckelvey</div>
   <div><img src="logo.png" />
     <em>dat-data.com</em> is non profit<br><br><img src="../node-dat-graph/sloan.jpg"/>
+    <img src="knight-logo-300.jpg" />
   </div>
   <div><img src="logo.png" />
     <em>dat-data.com</em> is open source<br>
   <img src="../node-dat-graph/people.png" />
   </div>
-  div>
+  <div>
       "A rule of thumb among biotech ... is that <em>half of published research cannot be replicated.</em>"<br><br>- Economist, Oct 2013
     </div>
     <div>
@@ -166,10 +167,10 @@ window.onload = function() {
     <div>
       Why?
     </div>
-    <div>code/data is private</div>
-    <div>code is hard to install</div>
-    <div>deployment costs money</div>
-    <div>code/data is lost</div>
+    <div>data is lost</div>
+    <div>data is large </div>
+    <div>data is private</div>
+    <div>bandwidth costs money</div>
     <div>
       <img src="../node-dat-graph/github.png" />
       <notes> unfortunately, its not that easy. github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
@@ -179,6 +180,9 @@ window.onload = function() {
   </pre></code>
     </div>
   <div><img src="gitpull.png" /></div>
+    <div>
+      If not git then.. what?
+    </div>
     <div>
       How do scientists reproduce research?
       <notes>we had to look into how scientists actually do reproduce research today and try to build a solution for them.</notes>
@@ -257,40 +261,50 @@ window.onload = function() {
   <div><img src="../node-dat-graph/dropbox.png" />Forkable?</div>
   <div><img src="../node-dat-graph/dropbox.png" />Open?</div>
   <div><img src="../node-dat-graph/dropbox.png" />Free?</div>
-<div><em>Sharing</em> make the data available <br /> <em>Replication</em> get the data and code<br /> <em>Version control</em> roll back the data <br /> <em>Collaboration</em> fork the data <br /> <em>Containerization</em> run the code on the data <br /></div>
+  <div><em>Sharing</em> make the data available <br /> <em>Replication</em> prove the data <br /> <em>Version control</em> roll back the data <br /> <em>Collaboration</em> fork the data <br /> <em>Containerization</em> run the code on the data <br /></div>
 <div>
   <em>Sharing</em> make the data avialable
 </div>
-<div><img src="bittorrent-swarm.png" /></div>
 <div>
-  <img src="open.png" />
+  <code><pre>$ dat link ~/path/to/my/data</pre></code>
 </div>
-<div><img src="bittorrent-swarm.png" /><em>Replication</em> get the data and code<br /></div>
+<div><img src="bittorrent-swarm.png" /><em>Replication</em> prove the data<br /></div>
 <div>
   <code><pre>$ dat [link]</pre></code>
 </div>
 <div>
-  <code><pre>dat dat://ab3df10ddfa</pre></code>
-</div>
-<div>
-    <img src="../node-dat-graph/nodejs.png" />
+  <code><pre>$ dat dat://ab3df10ddfa</pre></code>
 </div>
 <div>
   <em>karissa, give a demo</em>
 </div>
 <div>
-  in <em>dat</em>, each graph node points to the data storage.
+    <img src="../node-dat-graph/nodejs.png" />
 </div>
 <div>
-  this makes it easy to switch out default storage for something else. (bittorrent, anyone?)
+Replication
+  <ul>
+    <li>BitTorrent DHT</li>
+    <li>DNS (multicast)</li>
+  </ul>
 </div>
 <div>
-  or to store the data differently on different computers, using the same graph.
+  <img src="dns-discovery.png" />
+</div>
+<div>
+  <small>user -> hub </small>
+</div>
+<div>
+  <small>user -> hub </small>
+</div>
+<div>
+  <small>user - user</small>
 </div>
 <div>The Future</div>
 <div>
-  A public registry funded by the Knight Foundation
+  <img src="knight0.png" />
 </div>
+<div>Bring github-style collaboration to data</div>
 <div>
   <code><pre>$ dat publish census
 Username: karissa
@@ -300,7 +314,6 @@ Password: *********
 <div>
   <a href="http://publicbits.org/karissa/myproject">publicbits.org/karissa/census</a>
 </div>
-<div>Nice names for data</div>
 <div>
   <code><pre>$ dat publicbits.org/karissa/census:path/to/file.csv</pre></code>
 </div>
@@ -316,17 +329,21 @@ Replicate <em>only</em> the data and code <em>you need</em><br />
 <div><img src="dockerfile.png" /></div>
 <div><img src="hyperos.png" /></div>
 <div>
-<em>Version control</em> roll back the data<br>
+  in <em>dat</em>, each graph node points to the data storage.
+</div>
+<div>
+  this makes it easy to switch out default storage for something else.
+</div>
+<div>
+  or to store the data differently on different computers, using the same graph.
 </div>
 <div>
 <a href="http://github.com/mafintosh/hypergraph">github.com/mafintosh/hypergraph</a>
 <a href="http://github.com/mafintosh/hyperdrive">github.com/mafintosh/hyperdrive</a>
 </div>
-<div>
-  <em>Collaboration</em> fork the data
-</div>
-<div>
-  <img src="knight0.png" />
+<div><img src="logo.png" />
+  <em>dat-data.com</em> is open source<br>
+<img src="../node-dat-graph/people.png" />
 </div>
 </body>
 </html>
