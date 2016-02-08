@@ -148,7 +148,7 @@ window.onload = function() {
   </script>
 </head>
 <body>
-  <div><em>dat</em> 1.0 sneak peak<br><br>karissa mckelvey</div>
+  <div><em>dat</em> 1.0<br><br>karissa mckelvey</div>
   <div><img src="logo.png" />
     <em>dat-data.com</em> is non profit<br><br><img src="../node-dat-graph/sloan.jpg"/>
     <img src="knight-logo-300.jpg" />
@@ -170,7 +170,7 @@ window.onload = function() {
     <div>data is lost</div>
     <div>data is large </div>
     <div>data is private</div>
-    <div>bandwidth costs money</div>
+    <div>data is expensive</div>
     <div>
       <img src="../node-dat-graph/github.png" />
       <notes> unfortunately, its not that easy. github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
@@ -202,6 +202,14 @@ window.onload = function() {
       <img src="../node-dat-graph/aws.jpg" class="white" />
       Mount dropbox into aws!
     </div>
+    <div><img src="../node-dat-graph/dropbox.png" class="white" /></div>
+    <div><img src="../node-dat-graph/dropbox.png"/>Not reproducible</div>
+    <div><img src="dropboxpoof.jpg" /></div>
+    <div><img src="../node-dat-graph/dropbox.png" />Versioning?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Redundancy?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Forkable?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Open?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Free?</div>
     <div>
       domain experts aren't developers
       <notes>domain experts aren't developers.
@@ -228,47 +236,16 @@ window.onload = function() {
     <div>
       But, we need something like git for <em>data</em>.
     </div>
-  <div><img src="file-table.png" /></div> <div><img src="docs.001.png" class="small"/></div>
-  <div><img src="../node-dat-graph/data.jpg" /></div>
-  <div>Why?</div>
-  <div>Manually adding files.</div>
-  <div>File sizes <em>(100 MB)</em></div>
-  <div>
-    How do you build a <em>frictionless</em> git-like tool for collaboration?
-    <notes>
-      the hardest problem we have always had is the interface to dat.
-      how can we make something that acts like git, but is frictionless?
-    </notes>
-  </div>
-  <div>
-    <em>frictionless</em>
-  </div>
-  <div>
-    <em>collaboration (noun)</em> <br>
-    people working together to produce or create something.
-  </div>
-  <div>
-    <em>computers</em> working together to produce or create something.
-  </div>
-  <div>
-    the workflow should be <em>simple</em>
-  </div>
-  <div><img src="../node-dat-graph/dropbox.png" class="white" /></div>
-  <div><img src="../node-dat-graph/dropbox.png"/>Not reproducible</div>
-  <div><img src="dropboxpoof.jpg" /></div>
-  <div><img src="../node-dat-graph/dropbox.png" />Versioning?</div>
-  <div><img src="../node-dat-graph/dropbox.png" />Redundancy?</div>
-  <div><img src="../node-dat-graph/dropbox.png" />Forkable?</div>
-  <div><img src="../node-dat-graph/dropbox.png" />Open?</div>
-  <div><img src="../node-dat-graph/dropbox.png" />Free?</div>
   <div><em>Sharing</em> make the data available <br /> <em>Replication</em> prove the data <br /> <em>Version control</em> roll back the data <br /> <em>Collaboration</em> fork the data <br /> <em>Containerization</em> run the code on the data <br /></div>
 <div>
   <em>Sharing</em> make the data avialable
 </div>
+<div><img src="bittorrent-swarm.png" />
+</div>
 <div>
   <code><pre>$ dat link ~/path/to/my/data</pre></code>
 </div>
-<div><img src="bittorrent-swarm.png" /><em>Replication</em> prove the data<br /></div>
+<div><em>Replication</em> prove the data<br /></div>
 <div>
   <code><pre>$ dat [link]</pre></code>
 </div>
@@ -291,15 +268,17 @@ Replication
 <div>
   <img src="dns-discovery.png" />
 </div>
-<div>
-  <small>user -> hub </small>
+<div>Deduplication</div>
+<div><img src="../node-dat-graph/ant.jpg" /></div>
+<div><img src="../node-dat-graph/antcontents.png" /></div>
+  <div>
+<pre><code class="javascript">var hash = require('crypto').createHash('sha256')
+var ant = fs.readFileSync('ant.jpg').toString()
+hash.update(ant)
+</code></pre>
 </div>
-<div>
-  <small>user -> hub </small>
-</div>
-<div>
-  <small>user - user</small>
-</div>
+<div>abf3fad103eceb2s9deef32dab3019e38523d</div>
+<div>Rabin fingerprinting</div>
 <div>The Future</div>
 <div>
   <img src="knight0.png" />
@@ -328,15 +307,6 @@ Replicate <em>only</em> the data and code <em>you need</em><br />
 </div>
 <div><img src="dockerfile.png" /></div>
 <div><img src="hyperos.png" /></div>
-<div>
-  in <em>dat</em>, each graph node points to the data storage.
-</div>
-<div>
-  this makes it easy to switch out default storage for something else.
-</div>
-<div>
-  or to store the data differently on different computers, using the same graph.
-</div>
 <div>
 <a href="http://github.com/mafintosh/hypergraph">github.com/mafintosh/hypergraph</a>
 <a href="http://github.com/mafintosh/hyperdrive">github.com/mafintosh/hyperdrive</a>
