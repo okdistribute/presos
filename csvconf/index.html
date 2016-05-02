@@ -1,0 +1,272 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><style type='text/css'>
+body {
+  font-family:'Helvetica';
+  letter-spacing:0px;
+  background:#000;
+  background-size:100%;
+  color:#fff;
+  margin:0;
+  padding:0;
+  font-weight:bold;
+  background-repeat: no-repeat;
+}
+div {-webkit-text-stroke: 3px black; opacity: 1.0;}
+
+h1, h2, h3, p {
+  margin:0;
+}
+
+.columns {
+  display: flex !important;
+}
+.columns img {
+  width: 50%;
+  height: 500px;
+}
+
+em, a {
+  font-style:normal;
+  color:#8dbd0c;
+}
+.pull-right {
+  float: right;
+}
+a {
+  background:#34d0e7;
+  color:#000;
+  text-decoration:none;
+}
+
+.white {
+  background-color: white;
+}
+
+img.small {
+  width: initial;
+}
+
+img {
+  max-width:900px;
+  max-height:100%;
+}
+
+div {
+  cursor:pointer;
+  cursor:hand;
+  position:absolute;
+  top:0px;
+  left:0px;
+  padding:75px;
+  line-height:105%;
+}
+
+div.center {
+  text-align:center;
+}
+
+div.imageText {
+  text-shadow:0px 0px 5px rgba(0,0,0,0.2);
+}
+
+notes {
+  display:none;
+}
+/* normally not good, but ok in context of full screen directional navigation */
+:focus {
+  outline: 0;
+}
+
+</style>
+<link rel="stylesheet" href="color-brewer.css">
+<script src="highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type='text/javascript'>
+window.onload = function() {
+  var s = document.getElementsByTagName('div'), ti, i;
+  for (i = 0; i < s.length; i++) s[i].setAttribute('tabindex', 0);
+  if (!s) return;
+  var big = { current: 0, forward: fwd, reverse: rev, go: go, length: s.length };
+  window.big = big;
+  function resize() {
+    var w = window.innerWidth, h = window.innerHeight, e = s[big.current];
+    e.style.fontSize = h + 'px';
+    for (i = h - 2; i > 0 && (e.offsetWidth > w || e.offsetHeight > h); i -= 2) {
+      e.style.fontSize = i + 'px';
+    }
+    e.style.marginTop = (h - e.offsetHeight) / 2 + 'px';
+  }
+  function go(n) {
+    big.current = n;
+    var e = s[n], t = parseInt(e.getAttribute('data-timeToNext') || 0, 10),
+    notes = e.getElementsByTagName('notes');
+    document.body.className = e.getAttribute('data-bodyclass') || '';
+    for (i = 0; i < s.length; i++) s[i].style.display = 'none';
+    e.style.display = 'inline';
+    e.focus();
+    for (i = 0; typeof console === 'object' && i < notes.length; i++) console.log('%c%s: %s', 'padding:5px;font-family:serif;font-size:18px;line-height:150%;', n, notes[i].innerHTML.trim());
+    if (e.firstChild && e.firstChild.nodeName === 'IMG') {
+      document.body.style.backgroundImage = 'url("' + e.firstChild.src + '")';
+      e.firstChild.style.display = 'none';
+      if ('classList' in e) e.classList.add('imageText');
+    } else {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundColor = e.style.backgroundColor;
+    }
+    if (ti !== undefined) window.clearInterval(ti);
+    if (t > 0) ti = window.setTimeout(fwd, t * 1000);
+    resize();
+    if (window.location.hash !== n) window.location.hash = n;
+    document.title = e.textContent || e.innerText;
+  }
+  document.onclick = function() { go(++big.current % s.length); };
+  function fwd() { go(Math.min(s.length - 1, ++big.current)); }
+  function rev() { go(Math.max(0, --big.current)); }
+  document.onkeydown = function(e) {
+    if (e.which === 39 || e.which === 34 || e.which === 40) fwd();
+    if (e.which === 37 || e.which === 33 || e.which === 38) rev();
+  };
+  document.ontouchstart = function(e) {
+    var x0 = e.changedTouches[0].pageX;
+    document.ontouchend = function(e2) {
+      var x1 = e2.changedTouches[0].pageX;
+      if (x1 - x0 < 0) fwd();
+      if (x1 - x0 > 0) rev();
+    };
+  };
+  function parse_hash() {
+    return Math.max(Math.min(s.length - 1,
+      parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) big.current = parse_hash() || big.current;
+    window.onhashchange = function() {
+      i = parse_hash();
+      if (i !== big.current) go(i);
+    };
+    window.onresize = resize;
+    go(big.current);
+  };
+  </script>
+</head>
+<body>
+  <div><em>data with dat</em><br><br>karissa mckelvey</div>
+  <div><img src="../dat-Ropensci-15/logo.png" />
+    <em>dat-data.com</em> is non profit<br><br><img src="../node-dat-graph/sloan.jpg"/>
+  </div>
+  <div><img src="../dat-Ropensci-15/logo.png" />
+    <em>dat-data.com</em> is open source<br>
+  <img src="../node-dat-graph/people.png" />
+  </div>
+  <div>
+    How do we reproduce research today?
+  </div>
+  <div>
+    How do we <em>collaborate</em> on research today?
+  </div>
+  <div>
+    How do we <em>collaborate on data analysis</em> today?
+  </div>
+  <div><img src="../dat-Ropensci-15/file-table.png" /></div>
+  <div><img src="../node-dat-graph/serverclient.jpg" class="small"/></div>
+  <div><img src="../dat-Ropensci-15/docs.001.png" class="small"/></div>
+  <div><img src="../dat-Ropensci-15/tweetsvotesgit.png" class="white" /></div>
+  <div><img src="../dat-Ropensci-15/tweetsvotesdropbox.png" /></div>
+  <div><img src="../dat-Ropensci-15/docs.002.png" /></div>
+  <div><img src="../dat-Ropensci-15/gitpull.png" /></div>
+  <div><notes>Replicate the R analysis with raw .csv, but what about the python scripts?</notes><img src="../dat-Ropensci-15/tweetsvotesreplication.png" /></div>
+  <div><img src="../dat-Ropensci-15/file-table.png" /></div>
+  <div><img src="../dat-Ropensci-15/docs.001.png" class="small"/></div>
+  <div><img src="../dat-Ropensci-15/tweetsvotesgit.png" class="white" /></div>
+  <div><img src="../dat-Ropensci-15/tweetsvotesdropbox.png" /></div>
+  <div><img src="../node-dat-graph/data.jpg" /></div>
+  <div>
+    <img src="../node-dat-graph/github.png" />
+    :(
+  </div>
+  <div>Manually adding files.</div>
+  <div>File sizes <em>(100 MB)</em></div>
+  <div><img src="../dat-Ropensci-15/gitpull.png" /></div>
+  <div>
+    domain experts aren't developers
+    <notes>domain experts aren't developers.
+      a domain expert, like a data scientist, will want to focus on the algorithms. the math. the people. the stars.
+    </notes>
+  </div>
+  <div><img src="../node-dat-graph/math.jpg" /></div>
+  <div><img src="../node-dat-graph/ocean.jpg" /></div>
+  <div><img src="../node-dat-graph/andromeda.jpg" class="small"/></div>
+  <div>
+    git is for source code, and thats ok.
+    <notes>
+      git could work for 90% of the cases, but its an interface created for developers, not for domain experts.
+    </notes>
+  </div>
+  <div>
+    But, we need something like git for <em>collaborative data</em>.
+  </div>
+  <div>
+    How do you build a <em>frictionless</em> git-like tool for collaboration?
+    <notes>
+      the hardest problem we have always had is the interface to dat.
+      how can we make something that acts like git, but is frictionless?
+    </notes>
+  </div>
+  <div>
+    <em>frictionless</em>
+  </div>
+  <div>
+    <em>collaboration (noun)</em> <br>
+    people working together to produce or create something.
+  </div>
+  <div>
+    <em>computers</em> working together to produce or create something.
+  </div>
+  <div>
+    the workflow should be <em>simple</em>
+  </div>
+  <div><img src="../dat-Ropensci-15/logo.png" />dat beta</div>
+  <div><img src="../node-dat-graph/dropbox.png" class="white" /></div>
+  <div><img src="../node-dat-graph/dropbox.png"/>Not reproducible</div>
+  <div><img src="../dat-Ropensci-15/dropboxpoof.jpg" /></div>
+  <div><img src="../node-dat-graph/dropbox.png" />Versioning?</div>
+  <div><img src="../node-dat-graph/dropbox.png" />Redundancy?</div>
+  <div><img src="../node-dat-graph/dropbox.png" />Forkable?</div>
+  <div><img src="../node-dat-graph/dropbox.png" />Open?</div>
+  <div><img src="../node-dat-graph/dropbox.png" />Free?</div>
+<div><em>Sharing</em> make the data available <br /> <em>Replication</em> get the data and code<br /> <em>Version control</em> roll back the data <br /> <em>Collaboration</em> fork the data <br /> <em>Containerization</em> run the code on the data <br /></div>
+<div>
+  <em>Sharing</em> make the data avialable
+</div>
+<div>
+  <code><pre>$ dat link ~/path/to/myproject/data
+</pre></code>
+</div>
+<div>
+dat://d42ca557fbdc1e2b766629c8...
+</div>
+<div><img src="../dat-Ropensci-15/bittorrent-swarm.png" /></div>
+<div><img src="../dat-Ropensci-15/bittorrent-swarm.png" /><em>Replication</em> get the data and code<br /></div>
+<div>
+  <code><pre>$ dat dat://d42ca557...</pre></code>
+</div>
+<div>
+Replicate <em>only</em> the data and code <em>you need</em><br />
+</div>
+<div>
+  <code><pre>$ dat dat://d42ca557..:path/to/file.csv</pre></code>
+</div>
+<div>
+  OK Karissa, give a demo
+</div>
+<div><em>The Future</em></div>
+<div>
+  <code><pre>$ dat publish
+Username: karissa
+Password: *********
+</pre></code>
+</div>
+<div>
+  <em>Sharing</em> make the data available
+  <a href="http://dat.land/karissa/myproject">dat.land/karissa/myproject</a>
+</div>
+</body>
+</html>
