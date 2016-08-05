@@ -1,0 +1,227 @@
+<!DOCTYPE html><html><head><title></title><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" /><style type='text/css'>
+body {
+  font-family:'Helvetica';
+  letter-spacing:0px;
+  background:#000;
+  background-size:100%;
+  color:#fff;
+  margin:0;
+  padding:0;
+  font-weight:bold;
+  background-repeat: no-repeat;
+}
+div {-webkit-text-stroke: 3px black; opacity: 1.0;}
+
+h1, h2, h3, p {
+  margin:0;
+}
+
+.columns {
+  display: flex !important;
+}
+.columns img {
+  width: 50%;
+  height: 500px;
+}
+
+em, a {
+  font-style:normal;
+  color:#8dbd0c;
+}
+.pull-right {
+  float: right;
+}
+a {
+  background:#34d0e7;
+  color:#000;
+  text-decoration:none;
+}
+
+.white {
+  background-color: white;
+}
+
+img.small {
+  width: initial;
+}
+
+img {
+  max-width:900px;
+  max-height:100%;
+}
+
+div {
+  cursor:pointer;
+  cursor:hand;
+  position:absolute;
+  top:0px;
+  left:0px;
+  padding:75px;
+  line-height:105%;
+}
+
+div.center {
+  text-align:center;
+}
+
+div.imageText {
+  text-shadow:0px 0px 5px rgba(0,0,0,0.2);
+}
+
+notes {
+  display:none;
+}
+/* normally not good, but ok in context of full screen directional navigation */
+:focus {
+  outline: 0;
+}
+
+</style>
+<link rel="stylesheet" href="color-brewer.css">
+<script src="highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script type='text/javascript'>
+window.onload = function() {
+  var s = document.getElementsByTagName('div'), ti, i;
+  for (i = 0; i < s.length; i++) s[i].setAttribute('tabindex', 0);
+  if (!s) return;
+  var big = { current: 0, forward: fwd, reverse: rev, go: go, length: s.length };
+  window.big = big;
+  function resize() {
+    var w = window.innerWidth, h = window.innerHeight, e = s[big.current];
+    e.style.fontSize = h + 'px';
+    for (i = h - 2; i > 0 && (e.offsetWidth > w || e.offsetHeight > h); i -= 2) {
+      e.style.fontSize = i + 'px';
+    }
+    e.style.marginTop = (h - e.offsetHeight) / 2 + 'px';
+  }
+  function go(n) {
+    big.current = n;
+    var e = s[n], t = parseInt(e.getAttribute('data-timeToNext') || 0, 10),
+    notes = e.getElementsByTagName('notes');
+    document.body.className = e.getAttribute('data-bodyclass') || '';
+    for (i = 0; i < s.length; i++) s[i].style.display = 'none';
+    e.style.display = 'inline';
+    e.focus();
+    for (i = 0; typeof console === 'object' && i < notes.length; i++) console.log('%c%s: %s', 'padding:5px;font-family:serif;font-size:18px;line-height:150%;', n, notes[i].innerHTML.trim());
+    if (e.firstChild && e.firstChild.nodeName === 'IMG') {
+      document.body.style.backgroundImage = 'url("' + e.firstChild.src + '")';
+      e.firstChild.style.display = 'none';
+      if ('classList' in e) e.classList.add('imageText');
+    } else {
+      document.body.style.backgroundImage = '';
+      document.body.style.backgroundColor = e.style.backgroundColor;
+    }
+    if (ti !== undefined) window.clearInterval(ti);
+    if (t > 0) ti = window.setTimeout(fwd, t * 1000);
+    resize();
+    if (window.location.hash !== n) window.location.hash = n;
+    document.title = e.textContent || e.innerText;
+  }
+  document.onclick = function() { go(++big.current % s.length); };
+  function fwd() { go(Math.min(s.length - 1, ++big.current)); }
+  function rev() { go(Math.max(0, --big.current)); }
+  document.onkeydown = function(e) {
+    if (e.which === 39 || e.which === 34 || e.which === 40) fwd();
+    if (e.which === 37 || e.which === 33 || e.which === 38) rev();
+  };
+  document.ontouchstart = function(e) {
+    var x0 = e.changedTouches[0].pageX;
+    document.ontouchend = function(e2) {
+      var x1 = e2.changedTouches[0].pageX;
+      if (x1 - x0 < 0) fwd();
+      if (x1 - x0 > 0) rev();
+    };
+  };
+  function parse_hash() {
+    return Math.max(Math.min(s.length - 1,
+      parseInt(window.location.hash.substring(1), 10)), 0);
+    }
+    if (window.location.hash) big.current = parse_hash() || big.current;
+    window.onhashchange = function() {
+      i = parse_hash();
+      if (i !== big.current) go(i);
+    };
+    window.onresize = resize;
+    go(big.current);
+  };
+  </script>
+</head>
+<body>
+  <div><img src="logo.png" />dat</div>
+  <div><img src="logo.png" />
+    <em>dat-data.com</em> is non profit<br><br><img src="../node-dat-graph/sloan.jpg"/>
+    <img src="knight-logo-300.jpg" />
+  </div>
+  <div><img src="logo.png" />
+    <em>dat-data.com</em> is open source<br>
+  </div>
+  <div>
+      "A rule of thumb among biotech ... is that <em>half of published research cannot be replicated.</em>"<br><br>- Economist, Oct 2013
+    </div>
+    <div>
+      "Over <em>half</em> of psychology studies couldn't be reproduced."<br><br>
+      - Nature, Aug 2015
+    </div>
+    <div>
+      Why?
+    </div>
+    <div>data is lost</div>
+    <div>data is large </div>
+    <div>data is private</div>
+    <div>data is expensive</div>
+    <div>
+      <img src="../node-dat-graph/github.png" />
+      <notes> unfortunately, its not that easy. github is steadily increasing in popularity, but many still find it too cumbersome.</notes>
+    </div>
+    <div>
+      <code><pre>git pull --reb origin master
+  </pre></code>
+    </div>
+  <div><img src="gitpull.png" /></div>
+    <div>
+      If not git then.. what?
+    </div>
+    <div>
+      How do scientists reproduce research?
+      <notes>we had to look into how scientists actually do reproduce research today and try to build a solution for them.</notes>
+    </div>
+    <div>
+      How do data curators <em>collaborate</em> today?
+    </div>
+    <div>
+      <img src="../node-dat-graph/serverclient.jpg" />
+      shared network drives
+    </div>
+    <div>
+      <img src="../node-dat-graph/dropbox.png" class="white" />
+      and email. :(
+    </div>
+    <div><img src="../node-dat-graph/dropbox.png" class="white" /></div>
+    <div><img src="../node-dat-graph/dropbox.png"/>Not reproducible</div>
+    <div><img src="dropboxpoof.jpg" /></div>
+    <div><img src="../node-dat-graph/dropbox.png" />Versioning?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Redundancy?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Forkable?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Open?</div>
+    <div><img src="../node-dat-graph/dropbox.png" />Free?</div>
+    <div>
+      git is for source code, and thats ok.
+      <notes>
+        git could work for 90% of the cases, but its an interface created for developers, not for domain experts.
+      </notes>
+    </div>
+    <div>
+      But, we need something like git for <em>data</em>.
+    </div>
+<div>
+  <em>Sharing</em> make the data avialable
+</div>
+<div>
+  dat://e928455a928b97713dc89e5bfb26eda
+</div>
+<div><em>Replication</em> prove the data<br /></div>
+<div><img src="bittorrent-swarm.png" />
+</div>
+</body>
+</html>
